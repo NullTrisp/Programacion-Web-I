@@ -1,0 +1,26 @@
+{
+  "name": "web-sockets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NullTrisp/Programacion-Web-I.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NullTrisp/Programacion-Web-I/issues"
+  },
+  "homepage": "https://github.com/NullTrisp/Programacion-Web-I#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.5.3"
+  }
+}
