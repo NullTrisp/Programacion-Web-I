@@ -19,10 +19,14 @@ class SocketClient {
 
     this.socket.on("active_users_to_client", (users) => {
       const usersList = document.querySelector(".users-list");
-      usersList.innerHTML = "";
-      users.forEach((user) => {
+      // usersList.innerHTML = "";
+      users.forEach(({ username }) => {
         const li = document.createElement("li");
-        li.innerHTML = user.username;
+        li.innerHTML = username;
+        li.className = "user";
+        li.addEventListener("click", () => {
+          window.location = `http://localhost:3000/?user=${username}`
+        });
         usersList.appendChild(li);
       });
     });
