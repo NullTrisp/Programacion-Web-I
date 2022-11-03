@@ -1,12 +1,7 @@
 class SocketClient {
   constructor() {
     this.socket = io();
-    this.socket.on("msg_to_client", (msg) => {
-      const item = document.createElement("li");
-      item.textContent = msg;
-      document.getElementById("messages").appendChild(item);
-      window.scrollTo(0, document.body.scrollHeight);
-    });
+    this.socket.on("msg_to_client", appendMessage);
 
     this.socket.on("user_connected_to_client", (user) => {
       const modal = document.createElement("div");
@@ -21,13 +16,25 @@ class SocketClient {
         modal.remove();
       }, 2000);
     });
+
+    this.socket.on("active_users_to_client", (users) => {
+      const usersList = document.querySelector(".users-list");
+      usersList.innerHTML = "";
+      users.forEach((user) => {
+        const li = document.createElement("li");
+        li.innerHTML = user.username;
+        usersList.appendChild(li);
+      });
+    });
   }
 
   emitMessage(ev, username) {
     ev.preventDefault();
     const input = document.getElementById("input");
     if (input.value) {
-      this.socket.emit("msg_to_server", `${username}: ${input.value}`);
+      const msg = `${username}: ${input.value}`;
+      appendMessage(msg);
+      this.socket.emit("msg_to_server", msg);
       input.value = "";
     }
   }
@@ -63,4 +70,11 @@ const handleUsername = () => {
   } else {
     return username;
   }
+};
+
+const appendMessage = (msg) => {
+  const item = document.createElement("li");
+  item.textContent = msg;
+  document.getElementById("messages").appendChild(item);
+  window.scrollTo(0, document.body.scrollHeight);
 };

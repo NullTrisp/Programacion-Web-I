@@ -1,33 +1,39 @@
 import app from "./app.js";
 import { Server } from "socket.io";
+import messages from "./messages.js";
 
-const server = app.listen(3000, () => {
-  console.log(`Server running on port 3000`);
-});
+const server = new Server(
+  app.listen(3000, () => {
+    console.log(`Server running on port 3000`);
+  })
+);
 
-const io = new Server(server);
 let sockets = [];
 
-io.on("connection", (socket) => {
+server.on(messages.CONNECTION, (socket) => {
+  //User is connected, add to sockets array and log users
+  socket.on(messages.USER_CONNECTED_SERVER, (username) => {
+    sockets.push({ id: socket.id, username: username });
+    server.emit(messages.USER_CONNECTED_CLIENT, username);
+    sendActiveUsers();
+    logActiveUsers();
+  });
+
+  //User sends a message, broadcast to all users
+  socket.on(messages.MESSAGE_SERVER, (msg) => {
+    console.log("chat message: " + msg);
+    socket.broadcast.emit(messages.MESSAGE_CLIENT, msg);
+  });
+
+  //User disconnects, remove from sockets array and log users
   socket.on("disconnect", () => {
     sockets = sockets.filter((s) => s.id !== socket.id);
     console.log("user disconnected");
-    logActiveUsers(sockets);
-  });
-
-  socket.on("msg_to_server", (msg) => {
-    console.log("chat message: " + msg);
-    io.emit("msg_to_client", msg);
-  });
-
-  socket.on("user_connected_to_server", (username) => {
-    sockets.push({ id: socket.id, username: username });
-    io.emit("user_connected_to_client", username);
-    console.log("user connected: " + username);
-    logActiveUsers(sockets);
+    sendActiveUsers();
+    logActiveUsers();
   });
 });
 
-const logActiveUsers = (sockets) => {
-  console.table(sockets);
-};
+const logActiveUsers = () => sockets.length > 0 && console.table(sockets);
+
+const sendActiveUsers = () =>  server.emit(messages.ACTIVE_USERS_TO_CLIENT, sockets);
