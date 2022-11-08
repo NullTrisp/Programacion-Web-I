@@ -7,8 +7,8 @@ import Chat from './Chat';
 
 
 function Username() {
-    const usernameFromStore = useAppSelector(state => state.user.value)
-    const salaFromStore = useAppSelector(state => state.sala.value)
+    const userFromStore = useAppSelector(state => state.user)
+    const salaFromStore = useAppSelector(state => state.sala)
     const dispatch = useAppDispatch()
 
 
@@ -22,14 +22,14 @@ function Username() {
     const handleUsernameSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setModalIsOpen(false);
-        dispatch(add(username));
+        dispatch(add({ username, id: "" }));
         localStorage.setItem("username", username);
     }
 
     return (
         <div>
             {
-                usernameFromStore === "" &&
+                userFromStore.username === "" &&
                 <Modal isOpen={modalIsOpen}>
                     <form onSubmit={handleUsernameSubmit}>
                         <label>
@@ -41,8 +41,8 @@ function Username() {
                 </Modal>
             }
 
-            <h1>Hello {usernameFromStore}</h1>
-            <h4> {salaFromStore === "general" ? "General Room" : `Chat with ${salaFromStore}`}</h4>
+            <h1>Hello {userFromStore.username}</h1>
+            <h4> {salaFromStore.name === "general" ? "General Room" : `Whisper to ${salaFromStore.name}`}</h4>
             <Chat />
         </div>
     );

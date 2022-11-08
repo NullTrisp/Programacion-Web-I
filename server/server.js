@@ -19,7 +19,8 @@ server.on(messages.CONNECTION, (socket) => {
   socket.on(messages.USER_CONNECTED_SERVER, (username) => {
     if (!sockets.find((socketFound) => socketFound.id === socket.id)) {
       sockets.push({ id: socket.id, username: username });
-      server.emit(messages.USER_CONNECTED_CLIENT, username);
+      socket.broadcast.emit(messages.USER_CONNECTED_CLIENT, { id: socket.id, username: username });
+      server.to(socket.id).emit("user_connected_to_client_return_user", { id: socket.id, username: username });
       logActiveUsers();
       sendActiveUsers();
     }
@@ -31,12 +32,12 @@ server.on(messages.CONNECTION, (socket) => {
     socket.broadcast.emit(messages.MESSAGE_CLIENT, msg);
   });
 
+  //Private message (whisper)
   socket.on("private_message_to_server", ({ content, to }) => {
-    socket.to(to).emit("private message", {
-      content,
-      from: socket.id,
-    });
+    console.log("private message: " + content);
+    socket.to(to).emit("private_message_to_user", content);
   });
+
   //User disconnects, remove from sockets array and log users
   socket.on("disconnect", () => {
     if (sockets.find((socketFound) => socketFound.id === socket.id)) {
