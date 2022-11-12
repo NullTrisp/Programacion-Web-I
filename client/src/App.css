@@ -1,53 +1,30 @@
+:root {
+  --primary-color: #23a06e;
+  --secondary-color: white;
+  --button-color: #81ddb89e;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--secondary-color);
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.input-box {
+.message-box {
   position: fixed;
   bottom: 0;
   padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  column-gap: 10px;
 }
 
-.input-box input {
+.message-box input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -55,10 +32,124 @@
   outline: none;
 }
 
-.input-box button {
+.message-box button {
   width: 100%;
+  padding: 10px;
+  border: 1px solid var(--button-color);
+  border-radius: 5px;
+  background-color: var(--button-color);
+  cursor: pointer;
+}
+
+.boxing {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 20px;
+}
+
+.styled-button {
+  list-style: none;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #ccc;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: var(--secondary-color);
+}
+
+.top {
+  position: sticky;
+  top: 0;
+  background-color: var(--primary-color);
+  padding: 10px;
+}
+
+#user-modal-login {
+  position: absolute !important;
+}
+
+#user-modal-login h1 {
+  color: black;
+}
+
+#user-modal-login form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+  row-gap: 20px;
+}
+
+#user-modal-login input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid var(--button-color);
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+#user-modal-login button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--button-color);
+  border-radius: 5px;
+  background-color: var(--button-color);
+}
+
+.logout-box {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.logout-box button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(240, 149, 149, 0.45);
+  border-radius: 5px;
+  background-color: rgba(240, 149, 149, 0.45);
+  cursor: pointer;
+}
+
+.user {
+  background-color: #25da923c;
+}
+
+.external {
+  background-color: #e6e61c4c;
+}
+
+.private {
+  background-color: #e61c1c4c;
+}
+.status{
+  background-color: #7373734c;
+}
+#messages {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 10px;
+  margin-top: 10px;
+  row-gap: 2px;
+}
+
+#messages div {
+  margin-left: 25%;
+  margin-right: 25%;
 }
