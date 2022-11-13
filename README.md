@@ -16,6 +16,7 @@ Además el cliente se conecta al servidor para enviar y recibir mensajes sean pr
 2. Ejecutar el comando `npm i` para instalar las dependencias del cliente.
 3. Posteriormente ejecutar el comando `npm run build` para transpilar el codigo de react typescript a un fichero html.
 4. En la misma terminal ejecutar `npx serve -s build` para ejecutar el proyecto.
+5. Abrir un navegador y entrar a la direccion `http://localhost:3000` para ver el proyecto.
 
 ### Desarrollo
 #### Servidor
@@ -27,3 +28,4 @@ Además el cliente se conecta al servidor para enviar y recibir mensajes sean pr
 1. Abrir una terminal de comandos en el directorio raiz del proyecto, y ejecutar el comando `cd client` para entrar al directorio del cliente.
 2. Ejecutar el comando `npm i` para instalar las dependencias del cliente.
 3. Posteriormente ejecutar el comando `npm run start` para iniciar el cliente en modo desarrollo.
+4. Abrir un navegador y entrar a la direccion `http://localhost:3000` para ver el proyecto.
