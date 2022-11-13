@@ -41,6 +41,7 @@ export default function App({ socketClient }: { socketClient: SocketClient }) {
     dispatch(addUser({ username, id: "" }));
     localStorage.setItem("username", username);
     socketClient.socket.emit("user_connected_to_server", username);
+    dispatch(pushMessage("You have connected"));
   }
 
   const handleChatChange = ({ username, id }: User) => {
