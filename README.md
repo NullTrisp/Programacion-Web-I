@@ -2,7 +2,9 @@
 ## Descripcion
 El proyecto se basa en una arquitectura distribuida, cuenta con un cliente en react typescript y un servidor desarrollado en typescript con express.\
 El cliente almacena el nombre de usuario en el local storage por lo que para usarlo como diferentes usuarios es necesario utilizar distintos navegadores o ventanas privadas para no hacer uso del mismo usuario.\
-Además el cliente se conecta al servidor para enviar y recibir mensajes sean privados o publicos.
+Además el cliente se conecta al servidor para enviar y recibir mensajes sean privados o publicos.\
+Inicialmente el usuario está en una sala global de mensajes y puede enviar mensajes privados a modo de "whisper" a otros usuarios al hacer click sobre el nombre de estos.
+Finalmente para volver a enviar mensajes globales debe dar click sobre el botón "Send general messages". 
 ## Como ejcutar
 ### Producción
 #### Servidor
