@@ -7,9 +7,10 @@ import { User } from './types/User';
 import { changeSala } from './store/salaSlice';
 import { addUser, removeUser } from './store/userSlice';
 import { pushMessage } from './store/messagesSlice';
+import SocketClient from './SocketClient';
 
 
-export default function App({ socketClient }: { socketClient: any }) {
+export default function App({ socketClient }: { socketClient: SocketClient }) {
   // Collect the state from the store
   const userFromStore = useAppSelector(state => state.user)
   const salaFromStore = useAppSelector(state => state.sala)
@@ -26,7 +27,7 @@ export default function App({ socketClient }: { socketClient: any }) {
   const [message, setmessage] = useState("");
 
   // Handlers
-  socketClient.on("active_users_to_client", (users: User[]) => {
+  socketClient.socket.on("active_users_to_client", (users: User[]) => {
     setactiveUsers(users);
   });
 
@@ -39,7 +40,7 @@ export default function App({ socketClient }: { socketClient: any }) {
     setModalIsOpen(false);
     dispatch(addUser({ username, id: "" }));
     localStorage.setItem("username", username);
-    socketClient.emit("user_connected_to_server", username);
+    socketClient.socket.emit("user_connected_to_server", username);
   }
 
   const handleChatChange = ({ username, id }: User) => {
@@ -53,10 +54,10 @@ export default function App({ socketClient }: { socketClient: any }) {
       if (salaFromStore.name === "general") {
         const messageToEmitt = `${userFromStore.username}: ${message}`;
         dispatch(pushMessage(messageToEmitt));
-        socketClient.emit("msg_to_server", messageToEmitt);
+        socketClient.socket.emit("msg_to_server", messageToEmitt);
       } else {
         dispatch(pushMessage(`Private message to ${salaFromStore.name}: ${message}`));
-        socketClient.emit("private_message_to_server", { to: activeUsers.find(user => user.id === salaFromStore.id)?.id, content: `Private message from ${userFromStore.username}: ${message}` });
+        socketClient.socket.emit("private_message_to_server", { to: activeUsers.find(user => user.id === salaFromStore.id)?.id, content: `Private message from ${userFromStore.username}: ${message}` });
       }
       window.scrollTo(0, document.body.scrollHeight);
       setmessage("");
@@ -85,9 +86,10 @@ export default function App({ socketClient }: { socketClient: any }) {
         <h1> Hello {userFromStore.username}, you're now {salaFromStore.name === "general" ? "on the general room" : `whispering to ${salaFromStore.name}`}</h1>
         <h2> Active users </h2>
         <div className='boxing'>
+          <p className='user-styled-button'> You </p>
           {
             activeUsers
-              .filter((user) => user.id !== userFromStore.id)
+              .filter(({ id }) => id !== userFromStore.id)
               .map((user, index) => <p className='styled-button' key={index} onClick={() => handleChatChange(user)}>{user.username}</p>)
           }
         </div>

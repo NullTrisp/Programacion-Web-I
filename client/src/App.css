@@ -59,6 +59,15 @@ h3 {
   background-color: var(--secondary-color);
 }
 
+.user-styled-button {
+  list-style: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: rgb(203, 203, 203);
+}
+
 .top {
   position: sticky;
   top: 0;
@@ -138,9 +147,11 @@ h3 {
 .private {
   background-color: #e61c1c4c;
 }
-.status{
+
+.status {
   background-color: #7373734c;
 }
+
 #messages {
   display: grid;
   grid-template-columns: 1fr;
