@@ -4,7 +4,7 @@ import { User } from '../types/User';
 interface UserState extends User { };
 
 const initialState: UserState = {
-    username: localStorage.getItem('username') || '',
+    username: sessionStorage.getItem('username') || '',
     id: "",
 }
 
@@ -19,7 +19,7 @@ export const userSlice = createSlice({
         removeUser: (state) => {
             state.username = "";
             state.id = "";
-            localStorage.removeItem('username');
+            sessionStorage.removeItem('username');
         }
     }
 })

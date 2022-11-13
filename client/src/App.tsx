@@ -37,11 +37,13 @@ export default function App({ socketClient }: { socketClient: SocketClient }) {
 
   const handleUsernameSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setModalIsOpen(false);
-    dispatch(addUser({ username, id: "" }));
-    localStorage.setItem("username", username);
-    socketClient.socket.emit("user_connected_to_server", username);
-    dispatch(pushMessage("You have connected"));
+    if (username !== "") {
+      setModalIsOpen(false);
+      dispatch(addUser({ username, id: "" }));
+      sessionStorage.setItem("username", username);
+      socketClient.socket.emit("user_connected_to_server", username);
+      dispatch(pushMessage("You have connected"));
+    }
   }
 
   const handleChatChange = ({ username, id }: User) => {
@@ -102,7 +104,13 @@ export default function App({ socketClient }: { socketClient: SocketClient }) {
       </div>
       <div id="messages">
         {messagesFromStore.map((message, index) => {
-          const username = message.split(":")[0] === userFromStore.username ? "user" : message.split(" ")[0] === "Private" ? "private" : message.split(" ")[2] === "disconnected" || message.split(" ")[2] === "connected" ? "status" : "external";
+          const username = message.split(":")[0] === userFromStore.username ?
+            "user" :
+            message.split(" ")[0] === "Private" ?
+              "private" :
+              message.split(" ")[message.split(" ").length - 1] === "disconnected" || message.split(" ")[message.split(" ").length - 1] === "connected" ?
+                "status" :
+                "external";
           return <div key={index} className={username}>{message}</div>;
         })}
       </div>
