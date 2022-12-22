@@ -164,3 +164,11 @@ h3 {
   margin-left: 25%;
   margin-right: 25%;
 }
+
+.alert {
+  z-index: 9999 !important;
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 15% !important;
+}

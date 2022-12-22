@@ -8,6 +8,7 @@ import { changeSala } from './store/salaSlice';
 import { addUser, removeUser } from './store/userSlice';
 import { pushMessage } from './store/messagesSlice';
 import SocketClient from './SocketClient';
+import AlertComponent from './components/Alert';
 
 
 export default function App({ socketClient }: { socketClient: SocketClient }) {
@@ -25,6 +26,14 @@ export default function App({ socketClient }: { socketClient: SocketClient }) {
   const [modalIsOpen, setModalIsOpen] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
   const [message, setmessage] = useState("");
+  const [online, setOnline] = useState(true);
+  const [onlineStatusHasChanged, setOnlineStatusHasChanged] = useState(false);
+
+  window.addEventListener('online', () => setOnline(true));
+  window.addEventListener('offline', () => {
+    setOnlineStatusHasChanged(true);
+    setOnline(false)
+  });
 
   // Handlers
   socketClient.socket.on("active_users_to_client", (users: User[]) => {
@@ -75,13 +84,15 @@ export default function App({ socketClient }: { socketClient: SocketClient }) {
 
   return (
     <div className="App">
+      {online && onlineStatusHasChanged && <AlertComponent message={"You're back online!"} variant={"success"} />}
+      {!online && <AlertComponent message={"You're curently offline :("} variant={"danger"} />}
       {
         userFromStore.username === "" &&
         <Modal isOpen={modalIsOpen} id="user-modal-login" appElement={document.getElementById('root')!}>
           <form onSubmit={handleUsernameSubmit}>
             <h1> Please enter your username </h1>
-            <input type="text" value={username} onChange={handleUsernameChange} />
-            <button type="submit" value="Submit"> Submit </button>
+            <input type="text" value={username} onChange={handleUsernameChange} disabled={!online} />
+            <button type="submit" value="Submit" disabled={!online}> Submit </button>
           </form>
         </Modal>
       }
@@ -115,12 +126,12 @@ export default function App({ socketClient }: { socketClient: SocketClient }) {
         })}
       </div>
       <form className="message-box">
-        <input type="text" value={message} onChange={(ev) => setmessage(ev.target.value)} />
-        <button onClick={appendMessage} disabled={isDisabled}>Send</button>
+        <input type="text" value={message} disabled={!online} onChange={(ev) => setmessage(ev.target.value)} />
+        <button onClick={appendMessage} disabled={isDisabled || !online}>Send</button>
       </form>
 
       <div className="logout-box">
-        <button type="submit" onClick={() => handleLogout()}>Logout</button>
+        <button type="submit" disabled={!online} onClick={() => handleLogout()}>Logout</button>
       </div>
     </div>
   );
