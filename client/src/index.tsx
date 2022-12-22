@@ -8,27 +8,31 @@ import { store } from './store';
 import SocketClient from './SocketClient';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AlertComponent from './components/Alert';
+import { changeInstalled, changeUpdate } from './store/appStatus';
 
-const pwaInstalled = window.matchMedia('(display-mode: standalone)').matches;
+const pwaInstalled = window.matchMedia('(display-mode: standalone)').matches || store.getState().status.installed;
+
+window.onload = async () => { if (Notification.permission === "default") await Notification.requestPermission(); }
 
 serviceWorkerRegistration.register({
   onSuccess: async (registration: ServiceWorkerRegistration) => {
     if (Notification.permission === "default") {
-      await Notification.requestPermission()
+      await Notification.requestPermission();
     }
-
     if (pwaInstalled) return;
     await registration.showNotification("This is a PWA you can install it!");
   },
   onUpdate: async (registration: ServiceWorkerRegistration) => {
     if (Notification.permission === "default") {
-      await Notification.requestPermission()
-    } else if (Notification.permission === "denied") {
+      await Notification.requestPermission();
     }
+    store.dispatch(changeUpdate(true))
     await registration.showNotification("There's a new update available, please close and reopen the app!");
   }
 });
+
+window.addEventListener("appinstalled", () => store.dispatch(changeInstalled(true)));
+window.addEventListener('beforeinstallprompt', () => store.dispatch(changeInstalled(false)));
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -37,8 +41,6 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      {!pwaInstalled ?
-        <AlertComponent id="alerta-pwa" message={"This app can be installed! :) "} variant={"info"} /> : ""}
       <App socketClient={new SocketClient()} />
     </Provider>
   </React.StrictMode>

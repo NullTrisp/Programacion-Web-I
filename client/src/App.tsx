@@ -16,6 +16,8 @@ export default function App({ socketClient }: { socketClient: SocketClient }) {
   const userFromStore = useAppSelector(state => state.user)
   const salaFromStore = useAppSelector(state => state.sala)
   const messagesFromStore = useAppSelector(state => state.messages);
+  const pwaInstalled = useAppSelector(state => state.status.installed) || window.matchMedia('(display-mode: standalone)').matches;
+  const updateAvailable = useAppSelector(state => state.status.update);
 
   // Create a dispatch function
   const dispatch = useAppDispatch()
@@ -84,6 +86,10 @@ export default function App({ socketClient }: { socketClient: SocketClient }) {
 
   return (
     <div className="App">
+      {!pwaInstalled && !updateAvailable ?
+        <AlertComponent id="alerta-pwa" message={"This app can be installed! :)"} variant={"info"} /> : ""}
+      {!pwaInstalled && updateAvailable ?
+        <AlertComponent id="alerta-pwa" message={"There's a new update available, please close and reopen the app!"} variant={"info"} /> : ""}
       {online && onlineStatusHasChanged && <AlertComponent message={"You're back online!"} variant={"success"} />}
       {!online && <AlertComponent message={"You're curently offline :("} variant={"danger"} />}
       {

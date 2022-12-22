@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import statusSlice from './appStatus'
 import messagesSlice from './messagesSlice'
 import salaSlice from './salaSlice'
 import userSlice from './userSlice'
@@ -8,6 +9,7 @@ export const store = configureStore({
         user: userSlice,
         sala: salaSlice,
         messages: messagesSlice,
+        status: statusSlice,
     }
 })
 
